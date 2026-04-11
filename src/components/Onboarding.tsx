@@ -192,7 +192,7 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onClose }) => {
               >
                 <div className="space-y-3">
                   <h2 className="text-xl font-serif text-stone-800">{STEPS[currentStep].title}</h2>
-                  <p className="text-sm text-stone-500 leading-relaxed">
+                  <p className="text-sm text-stone-500 leading-relaxed whitespace-pre-line">
                     {STEPS[currentStep].description}
                   </p>
                 </div>

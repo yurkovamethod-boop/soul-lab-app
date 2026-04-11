@@ -254,7 +254,7 @@ export default function App() {
                 <span className="text-stone-600">{currentStep.module}</span>
               </div>
               <h2 className="text-3xl font-serif text-stone-800">{currentStep.title}</h2>
-              <p className="text-sm text-stone-500 italic font-serif leading-relaxed">
+              <p className="text-sm text-stone-500 italic font-serif leading-relaxed whitespace-pre-line">
                 {currentStep.description}
               </p>
             </div>
