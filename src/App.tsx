@@ -20,7 +20,8 @@ import {
   MessageSquare,
   Lock,
   Eye,
-  FlaskConical,
+  TreePine,
+  Moon,
   History,
   Info,
   CheckCircle2,
@@ -61,6 +62,16 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('soul_lab_progress', JSON.stringify(progress));
   }, [progress]);
+
+  const getToolIcon = (toolType: ToolType) => {
+    switch(toolType) {
+      case 'reflection': return PenTool;
+      case 'projection': return Eye;
+      case 'dreams': return Moon;
+      case 'imagination': return MessageSquare;
+      default: return PenTool;
+    }
+  };
 
   const tool = TOOLS[activeTool];
 
@@ -152,8 +163,8 @@ export default function App() {
           <div className="mb-10">
             <div className="flex items-center justify-between mb-1">
               <div className="flex items-center gap-2 text-stone-800">
-                <FlaskConical className="w-4 h-4" />
-                <h1 className="text-lg font-serif">Лаборатория</h1>
+                <TreePine className="w-4 h-4" />
+                <h1 className="text-lg font-serif">Путь индивидуации</h1>
               </div>
               <button 
                 onClick={() => setShowOnboarding(true)}
@@ -163,7 +174,7 @@ export default function App() {
                 <Info className="w-3.5 h-3.5" />
               </button>
             </div>
-            <p className="text-[9px] text-stone-400 uppercase tracking-widest font-mono">Тренажер Самости</p>
+            <p className="text-[9px] text-stone-400 uppercase tracking-widest font-mono">Дневник пути</p>
           </div>
 
           <div className="flex-1 space-y-8 overflow-y-auto">
@@ -218,7 +229,7 @@ export default function App() {
               className={`w-full h-10 rounded-xl text-xs flex items-center justify-center gap-2 transition-colors ${isLibraryOpen ? 'bg-stone-100 text-stone-900' : 'text-stone-400 hover:text-stone-600'}`}
             >
               <History className="w-3.5 h-3.5" />
-              <span>Архив Души</span>
+              <span>Дневник пути</span>
             </Button>
             <Button 
               onClick={() => setIsCuratorOpen(true)}
@@ -226,7 +237,7 @@ export default function App() {
               className="w-full h-12 rounded-xl border-stone-100 text-stone-600 hover:bg-stone-50 flex items-center justify-center gap-2 group"
             >
               <MessageSquare className="w-4 h-4 text-stone-400 group-hover:text-stone-800 transition-colors" />
-              <span className="text-xs">Стол Куратора</span>
+              <span className="text-xs">Куратор пути</span>
             </Button>
           </div>
         </aside>
@@ -284,7 +295,7 @@ export default function App() {
 
                     <div className="bg-white rounded-[3rem] p-10 shadow-xl border border-stone-50 space-y-8 relative overflow-hidden">
                       <div className="absolute top-0 right-0 p-8 opacity-5">
-                        <FlaskConical className="w-40 h-40" />
+                        <TreePine className="w-40 h-40" />
                       </div>
                       
                       <div className="flex flex-col md:flex-row gap-10 items-center">
@@ -317,7 +328,7 @@ export default function App() {
                         onClick={() => setIsLibraryOpen(true)}
                         className="h-16 rounded-2xl bg-stone-800 text-white hover:bg-stone-900 text-lg shadow-xl"
                       >
-                        Перейти в Архив Души
+                        Перейти в Дневник пути
                       </Button>
                       <Button 
                         variant="ghost"
@@ -338,7 +349,7 @@ export default function App() {
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <h2 className="text-2xl font-serif text-stone-800">Архив Души</h2>
+                        <h2 className="text-2xl font-serif text-stone-800">Дневник пути</h2>
                         <p className="text-xs text-stone-400">Все ваши записи и инсайты в одном месте</p>
                       </div>
                       <Button variant="ghost" onClick={() => setIsLibraryOpen(false)} className="text-stone-400">Закрыть</Button>
@@ -361,10 +372,7 @@ export default function App() {
                                   <span className="text-[10px] text-stone-400 font-mono">{entry.date}</span>
                                 </div>
                                 <div className="flex items-center gap-2 text-stone-300">
-                                  {entry.toolType === 'mirror' ? <Eye className="w-3 h-3" /> : 
-                                   entry.toolType === 'oracle' ? <Sparkles className="w-3 h-3" /> : 
-                                   entry.toolType === 'imagination' ? <MessageSquare className="w-3 h-3" /> : 
-                                   <PenTool className="w-3 h-3" />}
+                                  {React.createElement(getToolIcon(entry.toolType), { className: "w-3 h-3" })}
                                 </div>
                               </div>
                             </CardHeader>
@@ -411,14 +419,11 @@ export default function App() {
                       
                       <div className="flex items-center gap-4 p-4 bg-amber-50/50 border border-amber-100/50 rounded-2xl">
                         <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm">
-                          {activeTool === 'mirror' ? <Eye className="w-5 h-5 text-amber-600" /> : 
-                           activeTool === 'oracle' ? <Sparkles className="w-5 h-5 text-amber-600" /> : 
-                           activeTool === 'imagination' ? <MessageSquare className="w-5 h-5 text-amber-600" /> : 
-                           <PenTool className="w-5 h-5 text-amber-600" />}
+                          {React.createElement(getToolIcon(activeTool), { className: "w-5 h-5 text-amber-600" })}
                         </div>
                         <div>
                           <p className="text-[10px] font-bold uppercase tracking-wider text-amber-700">Задание этапа</p>
-                          <p className="text-xs text-stone-600">Используйте инструмент <strong>{tool.name}</strong>: {tool.description}</p>
+                          <p className="text-xs text-stone-600">Используйте инструмент <strong>{tool?.name || '...'}</strong>: {tool?.description || '...'}</p>
                         </div>
                       </div>
                     </div>
@@ -506,7 +511,7 @@ export default function App() {
                             <div className="flex justify-between items-center">
                               <span className="text-[9px] font-mono text-stone-300">{entry.date}</span>
                               <Badge variant="outline" className="text-[8px] uppercase border-stone-100 text-stone-400">
-                                {TOOLS[entry.toolType].name}
+                                {TOOLS[entry.toolType]?.name || 'Запись'}
                               </Badge>
                             </div>
                             <p className="text-sm text-stone-600 italic leading-relaxed">"{entry.content}"</p>

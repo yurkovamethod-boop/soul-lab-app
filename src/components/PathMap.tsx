@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { PathStep, UserProgress, TOOLS } from '../types';
-import { CheckCircle2, Eye, Sparkles, MessageSquare, PenTool, Circle } from 'lucide-react';
+import { CheckCircle2, Eye, Sparkles, MessageSquare, PenTool, Circle, Moon } from 'lucide-react';
 
 interface PathMapProps {
   steps: PathStep[];
@@ -32,8 +32,8 @@ export const PathMap: React.FC<PathMapProps> = ({ steps, progress, onStepClick }
           const isCurrent = progress.currentStepId === step.id;
           const isLocked = idx > 0 && !progress.completedSteps.includes(steps[idx-1].id) && !isCurrent;
           
-          const Icon = step.requiredTool === 'mirror' ? Eye : 
-                       step.requiredTool === 'oracle' ? Sparkles : 
+          const Icon = step.requiredTool === 'projection' ? Eye : 
+                       step.requiredTool === 'dreams' ? Moon : 
                        step.requiredTool === 'imagination' ? MessageSquare : PenTool;
 
           return (
@@ -89,7 +89,7 @@ export const PathMap: React.FC<PathMapProps> = ({ steps, progress, onStepClick }
                   animate={{ opacity: 1, y: 0 }}
                   className="absolute -top-8 bg-amber-50 text-amber-700 text-[8px] font-bold uppercase tracking-tighter px-2 py-1 rounded-full border border-amber-100"
                 >
-                  Нужен: {TOOLS[step.requiredTool].name}
+                  Нужен: {TOOLS[step.requiredTool]?.name || '...'}
                 </motion.div>
               )}
             </div>

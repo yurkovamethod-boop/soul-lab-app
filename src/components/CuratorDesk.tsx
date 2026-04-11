@@ -18,7 +18,7 @@ interface CuratorDeskProps {
 
 export const CuratorDesk: React.FC<CuratorDeskProps> = ({ isOpen, onClose }) => {
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'model', content: 'Приветствую вас в Лаборатории Самости. Я ваш Куратор. Здесь вы можете задать любой вопрос о вашем пути, символах или просто поделиться тем, что вас беспокоит. О чем вы думаете сейчас?' }
+    { role: 'model', content: 'Здравствуйте. Я ваш Куратор на пути индивидуации. Вы можете задать любой вопрос о пути, поделиться тем, что вас беспокоит, или попросить помочь разобраться в образе или переживании. О чём вы думаете сейчас?' }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -76,8 +76,8 @@ export const CuratorDesk: React.FC<CuratorDeskProps> = ({ isOpen, onClose }) => 
                   <Sparkles className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-serif font-bold text-stone-800">Стол Куратора</h3>
-                  <p className="text-[10px] text-stone-400 uppercase tracking-widest font-mono">Прямая связь</p>
+                  <h3 className="text-sm font-serif font-bold text-stone-800">Куратор пути</h3>
+                  <p className="text-[10px] text-stone-400 uppercase tracking-widest font-mono">Обратная связь</p>
                 </div>
               </div>
               <Button variant="ghost" size="icon" onClick={onClose} className="rounded-full hover:bg-stone-100">
@@ -147,7 +147,7 @@ export const CuratorDesk: React.FC<CuratorDeskProps> = ({ isOpen, onClose }) => 
                 </Button>
               </div>
               <p className="text-[9px] text-center text-stone-400 mt-3 italic">
-                Куратор видит ваш путь и готов помочь с любым вопросом.
+                Куратор сопровождает вас на протяжении всего пути.
               </p>
             </div>
           </motion.div>
