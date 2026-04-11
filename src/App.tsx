@@ -237,7 +237,7 @@ export default function App() {
               className="w-full h-12 rounded-xl border-stone-100 text-stone-600 hover:bg-stone-50 flex items-center justify-center gap-2 group"
             >
               <MessageSquare className="w-4 h-4 text-stone-400 group-hover:text-stone-800 transition-colors" />
-              <span className="text-xs">Куратор пути</span>
+              <span className="text-xs">ИИ-Куратор пути</span>
             </Button>
           </div>
         </aside>
@@ -442,7 +442,7 @@ export default function App() {
                               <div className="space-y-4">
                                 <div className="flex items-center gap-2 text-stone-400">
                                   <Sparkles className="w-4 h-4" />
-                                  <span className="text-[10px] font-bold uppercase tracking-widest">Инсайт от Куратора</span>
+                                  <span className="text-[10px] font-bold uppercase tracking-widest">Инсайт от ИИ-Куратора</span>
                                 </div>
                                 <div className="prose prose-stone prose-sm max-w-none text-stone-700 leading-relaxed bg-stone-50 p-8 rounded-3xl border border-stone-100">
                                   <ReactMarkdown>{lastInsight}</ReactMarkdown>
@@ -489,7 +489,7 @@ export default function App() {
                                 {isAnalyzing ? (
                                   <div className="flex items-center gap-3">
                                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                    <span>Куратор анализирует...</span>
+                                    <span>ИИ-Куратор анализирует...</span>
                                   </div>
                                 ) : 'Зафиксировать и получить инсайт'}
                               </Button>

@@ -18,7 +18,7 @@ interface CuratorDeskProps {
 
 export const CuratorDesk: React.FC<CuratorDeskProps> = ({ isOpen, onClose }) => {
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'model', content: 'Здравствуйте. Я ваш Куратор на пути индивидуации. Вы можете задать любой вопрос о пути, поделиться тем, что вас беспокоит, или попросить помочь разобраться в образе или переживании. О чём вы думаете сейчас?' }
+    { role: 'model', content: 'Здравствуйте. Я ваш ИИ-Куратор на пути индивидуации. Вы можете задать любой вопрос о пути, поделиться тем, что вас беспокоит, или попросить помочь разобраться в образе или переживании. О чём вы думаете сейчас?' }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -76,7 +76,7 @@ export const CuratorDesk: React.FC<CuratorDeskProps> = ({ isOpen, onClose }) => 
                   <Sparkles className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-serif font-bold text-stone-800">Куратор пути</h3>
+                  <h3 className="text-sm font-serif font-bold text-stone-800">ИИ-Куратор пути</h3>
                   <p className="text-[10px] text-stone-400 uppercase tracking-widest font-mono">Обратная связь</p>
                 </div>
               </div>
@@ -126,7 +126,7 @@ export const CuratorDesk: React.FC<CuratorDeskProps> = ({ isOpen, onClose }) => 
               <div className="relative">
                 <textarea 
                   rows={1}
-                  placeholder="Ваш вопрос Куратору..."
+                  placeholder="Ваш вопрос ИИ-Куратору..."
                   className="w-full bg-white border border-stone-200 rounded-2xl py-4 pl-4 pr-14 text-sm focus:outline-none focus:ring-1 focus:ring-stone-400 resize-none"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
@@ -147,7 +147,7 @@ export const CuratorDesk: React.FC<CuratorDeskProps> = ({ isOpen, onClose }) => 
                 </Button>
               </div>
               <p className="text-[9px] text-center text-stone-400 mt-3 italic">
-                Куратор сопровождает вас на протяжении всего пути.
+                ИИ-Куратор сопровождает вас на протяжении всего пути.
               </p>
             </div>
           </motion.div>
