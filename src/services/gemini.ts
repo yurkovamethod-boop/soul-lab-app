@@ -1,12 +1,23 @@
 import { GoogleGenAI } from "@google/genai";
 
-// Initialize the Gemini API client using the environment variable.
-// In AI Studio, GEMINI_API_KEY is automatically injected.
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+// Helper to get the AI client lazily. This prevents the app from crashing 
+// at the top level if the API key is not yet configured in GitHub Secrets.
+let aiInstance: GoogleGenAI | null = null;
+
+function getAI() {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) return null;
+  
+  if (!aiInstance) {
+    aiInstance = new GoogleGenAI({ apiKey });
+  }
+  return aiInstance;
+}
 
 export async function getCuratorResponse(message: string, history: { role: 'user' | 'model', parts: { text: string }[] }[]) {
-  if (!process.env.GEMINI_API_KEY) {
-    return "ИИ-Куратор временно недоступен. (API Key missing)";
+  const ai = getAI();
+  if (!ai) {
+    return "ИИ-Куратор временно недоступен. (API Key missing in GitHub Secrets)";
   }
 
   try {
@@ -26,8 +37,9 @@ export async function getCuratorResponse(message: string, history: { role: 'user
 }
 
 export async function getJungianAnalysis(content: string, type: string) {
-  if (!process.env.GEMINI_API_KEY) {
-    return "ИИ-Куратор временно недоступен. (API Key missing)";
+  const ai = getAI();
+  if (!ai) {
+    return "ИИ-Куратор временно недоступен. (API Key missing in GitHub Secrets)";
   }
 
   const prompts: Record<string, string> = {
