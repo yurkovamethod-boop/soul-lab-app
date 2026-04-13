@@ -2,18 +2,11 @@
 const PROXY_URL = "https://gemini-proxy.yurkovezzz.workers.dev";
 
 export async function getCuratorResponse(message: string, history: { role: 'user' | 'model', parts: { text: string }[] }[]) {
-  const API_KEY = process.env.GEMINI_API_KEY;
-  
-  if (!API_KEY) {
-    console.error("GEMINI_API_KEY is missing in the environment!");
-    return "Ошибка: API ключ не найден. Проверьте настройки GitHub Secrets.";
-  }
-
   try {
     const contents = history.concat([{ role: 'user', parts: [{ text: message }] }]);
     
-    console.log("Calling proxy:", PROXY_URL);
-    const response = await fetch(`${PROXY_URL}/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+    // Ключ больше не передаем, прокси сам его подставит из своих настроек
+    const response = await fetch(`${PROXY_URL}/v1beta/models/gemini-1.5-flash:generateContent`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -27,25 +20,18 @@ export async function getCuratorResponse(message: string, history: { role: 'user
     if (!response.ok) {
       const errorData = await response.text();
       console.error("Proxy Error Details:", response.status, errorData);
-      throw new Error(`Ошибка прокси: ${response.status}`);
+      throw new Error(`Статус ${response.status}`);
     }
 
     const data = await response.json();
     return data.candidates?.[0]?.content?.parts?.[0]?.text || "Я задумался над вашим вопросом...";
   } catch (error) {
     console.error("Proxy Curator Error:", error);
-    return `Связь с ИИ-Куратором прервалась (Код: ${error instanceof Error ? error.message : 'Unknown'})`;
+    return `[ВЕРСИЯ 3] Ошибка: ${error instanceof Error ? error.message : 'Неизвестно'}.`;
   }
 }
 
 export async function getJungianAnalysis(content: string, type: string) {
-  const API_KEY = process.env.GEMINI_API_KEY;
-  
-  // Если ключа нет в браузере, прокси попробует взять его из своих внутренних настроек
-  const urlWithKey = API_KEY 
-    ? `${PROXY_URL}/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`
-    : `${PROXY_URL}/v1beta/models/gemini-1.5-flash:generateContent`;
-
   try {
     const prompts: Record<string, string> = {
       'reflection': `Вы — ИИ-Куратор пути индивидуации, юнгианский аналитик. Женщина написала рефлексию в рамках курса по Юнгу. Дайте тёплую, глубокую обратную связь: что вы видите в этой записи? Какие движения психики заметны? Задайте один вопрос, который поможет ей пойти глубже. Обращайтесь к ней на «Вы». Запись: "${content}"`,
@@ -54,7 +40,7 @@ export async function getJungianAnalysis(content: string, type: string) {
       'imagination': `Вы — ИИ-Куратор пути индивидуации. Женщина выполнила практику активного воображения — прямой диалог с образом бессознательного. Отметьте, что важного произошло в этом диалоге. Какой архетип мог проявиться? Что это говорит о её пути? Обращайтесь к ней на «Вы». Запись: "${content}"`
     };
 
-    const response = await fetch(urlWithKey, {
+    const response = await fetch(`${PROXY_URL}/v1beta/models/gemini-1.5-flash:generateContent`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -75,7 +61,6 @@ export async function getJungianAnalysis(content: string, type: string) {
     return data.candidates?.[0]?.content?.parts?.[0]?.text || "Мысли пока не оформились в слова.";
   } catch (error) {
     console.error("Proxy Analysis Error:", error);
-    // Добавляем метку ВЕРСИЯ 2, чтобы точно знать, что код обновился
-    return `[ВЕРСИЯ 2] Ошибка связи с ИИ: ${error instanceof Error ? error.message : 'Неизвестно'}. Проверьте Cloudflare и Sync.`;
+    return `[ВЕРСИЯ 3] Ошибка анализа: ${error instanceof Error ? error.message : 'Неизвестно'}.`;
   }
 }
