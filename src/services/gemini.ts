@@ -27,7 +27,7 @@ export async function getCuratorResponse(message: string, history: { role: 'user
     return data.candidates?.[0]?.content?.parts?.[0]?.text || "Я задумался над вашим вопросом...";
   } catch (error) {
     console.error("Proxy Curator Error:", error);
-    return `[ВЕРСИЯ 5] Ошибка сети: ${error instanceof Error ? error.message : 'Неизвестно'}. Попробуйте отключить AdBlock или VPN.`;
+    return `[ВЕРСИЯ 6] Ошибка: ${error instanceof Error ? error.message : 'Неизвестно'}.`;
   }
 }
 
@@ -40,7 +40,7 @@ export async function getJungianAnalysis(content: string, type: string) {
       'imagination': `Вы — ИИ-Куратор пути индивидуации. Женщина выполнила практику активного воображения — прямой диалог с образом бессознательного. Отметьте, что важного произошло в этом диалоге. Какой архетип мог проявиться? Что это говорит о её пути? Обращайтесь к ней на «Вы». Запись: "${content}"`
     };
 
-    const response = await fetch(`${PROXY_URL}/v1beta/models/gemini-1.5-flash:generateContent`, {
+    const response = await fetch(PROXY_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -52,13 +52,12 @@ export async function getJungianAnalysis(content: string, type: string) {
     });
 
     if (!response.ok) {
-      const errorData = await response.text();
       throw new Error(`Статус ${response.status}`);
     }
 
     const data = await response.json();
     return data.candidates?.[0]?.content?.parts?.[0]?.text || "Мысли пока не оформились в слова.";
   } catch (error) {
-    return `[ВЕРСИЯ 5] Ошибка анализа: ${error instanceof Error ? error.message : 'Неизвестно'}.`;
+    return `[ВЕРСИЯ 6] Ошибка анализа: ${error instanceof Error ? error.message : 'Неизвестно'}.`;
   }
 }
