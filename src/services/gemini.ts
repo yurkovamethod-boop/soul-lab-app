@@ -27,7 +27,7 @@ export async function getCuratorResponse(message: string, history: { role: 'user
     return data.candidates?.[0]?.content?.parts?.[0]?.text || "Я задумался над вашим вопросом...";
   } catch (error) {
     console.error("Proxy Curator Error:", error);
-    return `[ВЕРСИЯ 4] Ошибка: ${error instanceof Error ? error.message : 'Неизвестно'}.`;
+    return `[ВЕРСИЯ 5] Ошибка сети: ${error instanceof Error ? error.message : 'Неизвестно'}. Попробуйте отключить AdBlock или VPN.`;
   }
 }
 
@@ -53,14 +53,12 @@ export async function getJungianAnalysis(content: string, type: string) {
 
     if (!response.ok) {
       const errorData = await response.text();
-      console.error("Proxy Analysis Error Details:", response.status, errorData);
       throw new Error(`Статус ${response.status}`);
     }
 
     const data = await response.json();
     return data.candidates?.[0]?.content?.parts?.[0]?.text || "Мысли пока не оформились в слова.";
   } catch (error) {
-    console.error("Proxy Analysis Error:", error);
-    return `[ВЕРСИЯ 4] Ошибка анализа: ${error instanceof Error ? error.message : 'Неизвестно'}.`;
+    return `[ВЕРСИЯ 5] Ошибка анализа: ${error instanceof Error ? error.message : 'Неизвестно'}.`;
   }
 }
