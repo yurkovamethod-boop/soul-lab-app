@@ -27,7 +27,7 @@ export async function getCuratorResponse(message: string, history: { role: 'user
     return data.candidates?.[0]?.content?.parts?.[0]?.text || "Я задумался над вашим вопросом...";
   } catch (error) {
     console.error("Proxy Curator Error:", error);
-    return `[ВЕРСИЯ 3] Ошибка: ${error instanceof Error ? error.message : 'Неизвестно'}.`;
+    return `[ВЕРСИЯ 4] Ошибка: ${error instanceof Error ? error.message : 'Неизвестно'}.`;
   }
 }
 
@@ -61,6 +61,6 @@ export async function getJungianAnalysis(content: string, type: string) {
     return data.candidates?.[0]?.content?.parts?.[0]?.text || "Мысли пока не оформились в слова.";
   } catch (error) {
     console.error("Proxy Analysis Error:", error);
-    return `[ВЕРСИЯ 3] Ошибка анализа: ${error instanceof Error ? error.message : 'Неизвестно'}.`;
+    return `[ВЕРСИЯ 4] Ошибка анализа: ${error instanceof Error ? error.message : 'Неизвестно'}.`;
   }
 }
