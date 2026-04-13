@@ -12,6 +12,7 @@ import { TreeVisualizer } from './components/TreeVisualizer';
 import { PathMap } from './components/PathMap';
 import { CuratorDesk } from './components/CuratorDesk';
 import { Onboarding } from './components/Onboarding';
+import { Oracle, PsycheMap, LifeScale, Mandala, PdfExport } from './components/StepExtras';
 import { UserProgress, INDIVIDUATION_PATH, DiaryEntry, TOOLS, ToolType, PathStep } from './types';
 import { 
   Sparkles, 
@@ -224,7 +225,10 @@ export default function App() {
 
           <div id="onboarding-tools" className="mt-auto pt-6 border-t border-stone-50 space-y-2">
             <Button 
-              onClick={() => setIsLibraryOpen(!isLibraryOpen)}
+              onClick={() => {
+                setIsLibraryOpen(!isLibraryOpen);
+                setIsFinalCelebrationOpen(false);
+              }}
               variant="ghost"
               className={`w-full h-10 rounded-xl text-xs flex items-center justify-center gap-2 transition-colors ${isLibraryOpen ? 'bg-stone-100 text-stone-900' : 'text-stone-400 hover:text-stone-600'}`}
             >
@@ -239,6 +243,20 @@ export default function App() {
               <MessageSquare className="w-4 h-4 text-stone-400 group-hover:text-stone-800 transition-colors" />
               <span className="text-xs">ИИ-Куратор пути</span>
             </Button>
+            {(progress.completedSteps.includes('step_5') || progress.currentStepId === 'step_6') && (
+              <Button 
+                onClick={() => {
+                  setActiveTool('dreams');
+                  setIsLibraryOpen(false);
+                  setIsFinalCelebrationOpen(false);
+                }}
+                variant="ghost"
+                className={`w-full h-10 rounded-xl text-xs flex items-center justify-center gap-2 transition-colors ${activeTool === 'dreams' && !isLibraryOpen ? 'bg-stone-100 text-stone-900' : 'text-stone-400 hover:text-stone-600'}`}
+              >
+                <Moon className="w-3.5 h-3.5" />
+                <span>Дневник сновидений</span>
+              </Button>
+            )}
           </div>
         </aside>
 
@@ -257,6 +275,13 @@ export default function App() {
               <p className="text-sm text-stone-500 italic font-serif leading-relaxed whitespace-pre-line">
                 {currentStep.description}
               </p>
+              {currentStep.id === 'step_2' && <PsycheMap />}
+              {currentStep.id === 'step_4' && <Oracle type="shadow" />}
+              {currentStep.id === 'step_6' && <Oracle type="dreams" />}
+              {currentStep.id === 'step_7' && <LifeScale />}
+              {currentStep.id === 'step_8' && <Oracle type="animus" />}
+              {currentStep.id === 'step_10' && <Mandala />}
+              {currentStep.id === 'step_12' && <PdfExport entries={progress.entries} />}
             </div>
           </div>
 
@@ -499,31 +524,7 @@ export default function App() {
                       </CardContent>
                     </Card>
 
-                    {/* Step History */}
-                    <section className="space-y-4">
-                      <div className="flex items-center gap-2 text-stone-400">
-                        <History className="w-3 h-3" />
-                        <h3 className="text-[10px] font-bold uppercase tracking-widest">История этого этапа</h3>
-                      </div>
-                      <div className="grid gap-4">
-                        {progress.entries.filter(e => e.stepId === currentStep.id).map(entry => (
-                          <div key={entry.id} className="p-6 bg-white rounded-3xl border border-stone-100 shadow-sm space-y-3">
-                            <div className="flex justify-between items-center">
-                              <span className="text-[9px] font-mono text-stone-300">{entry.date}</span>
-                              <Badge variant="outline" className="text-[8px] uppercase border-stone-100 text-stone-400">
-                                {TOOLS[entry.toolType]?.name || 'Запись'}
-                              </Badge>
-                            </div>
-                            <p className="text-sm text-stone-600 italic leading-relaxed">"{entry.content}"</p>
-                          </div>
-                        ))}
-                        {!hasEntryForCurrentStep && (
-                          <div className="text-center py-10 border-2 border-dashed border-stone-100 rounded-3xl">
-                            <p className="text-xs text-stone-300 italic">Здесь будут ваши записи для этого этапа</p>
-                          </div>
-                        )}
-                      </div>
-                    </section>
+                    {/* Interaction Area is now cleaner, history is in the Diary */}
                   </motion.div>
                 )}
               </AnimatePresence>

@@ -5,7 +5,6 @@ import {
   ChevronRight, 
   ChevronLeft, 
   Sparkles, 
-  FlaskConical, 
   History, 
   MessageSquare,
   ArrowDown,
