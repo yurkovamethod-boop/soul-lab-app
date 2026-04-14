@@ -140,9 +140,9 @@ body {
     @apply border-border outline-ring/50;
     }
   body {
-    @apply bg-background text-foreground text-lg sm:text-2xl;
+    @apply bg-background text-foreground text-sm sm:text-base;
     }
   html {
-    @apply font-sans text-[18px] sm:text-[22px];
+    @apply font-sans text-[16px];
     }
 }
