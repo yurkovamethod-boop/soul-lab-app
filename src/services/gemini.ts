@@ -8,6 +8,8 @@ export async function getCuratorResponse(message: string, history: { role: 'user
     // Ключ больше не передаем, прокси сам его подставит из своих настроек
     const response = await fetch(PROXY_URL, {
       method: "POST",
+      mode: "cors",
+      credentials: "omit",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         contents,
@@ -30,9 +32,11 @@ export async function getCuratorResponse(message: string, history: { role: 'user
     console.error("Proxy Curator Error:", error);
     const msg = error instanceof Error ? error.message : 'Неизвестно';
     if (msg === 'Failed to fetch') {
-      return `[ВЕРСИЯ 9] Ошибка: Не удалось связаться с прокси. Пожалуйста: 1. Отключите AdBlock. 2. Проверьте, что адрес прокси в Cloudflare верный. 3. Попробуйте режим Инкогнито.`;
+      return `[ВЕРСИЯ 10] Ошибка: Браузер заблокировал запрос. 
+      1. Откройте сайт в режиме ИНКОГНИТО (Ctrl+Shift+N).
+      2. Если не поможет, нажмите F12 -> вкладка Console и пришлите скриншот красной ошибки.`;
     }
-    return `[ВЕРСИЯ 9] Ошибка: ${msg}.`;
+    return `[ВЕРСИЯ 10] Ошибка: ${msg}.`;
   }
 }
 
@@ -47,6 +51,8 @@ export async function getJungianAnalysis(content: string, type: string) {
 
     const response = await fetch(PROXY_URL, {
       method: "POST",
+      mode: "cors",
+      credentials: "omit",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         contents: [{ role: 'user', parts: [{ text: prompts[type] || content }] }],
@@ -67,8 +73,8 @@ export async function getJungianAnalysis(content: string, type: string) {
   } catch (error) {
     const msg = error instanceof Error ? error.message : 'Неизвестно';
     if (msg === 'Failed to fetch') {
-      return `[ВЕРСИЯ 9] Ошибка анализа: Не удалось достучаться до прокси. Проверьте AdBlock или адрес воркера.`;
+      return `[ВЕРСИЯ 10] Ошибка анализа: Запрос заблокирован браузером. Попробуйте режим Инкогнито или проверьте консоль (F12).`;
     }
-    return `[ВЕРСИЯ 9] Ошибка анализа: ${msg}.`;
+    return `[ВЕРСИЯ 10] Ошибка анализа: ${msg}.`;
   }
 }
