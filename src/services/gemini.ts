@@ -31,7 +31,7 @@ export async function getCuratorResponse(message: string, history: { role: 'user
   } catch (error) {
     console.error("Proxy Curator Error:", error);
     const msg = error instanceof Error ? error.message : 'Неизвестно';
-    return `[ВЕРСИЯ 15] Ошибка: ${msg}.`;
+    return `[ВЕРСИЯ 16] Ошибка: ${msg}.`;
   }
 }
 
@@ -66,6 +66,6 @@ export async function getJungianAnalysis(content: string, type: string) {
     return data.candidates?.[0]?.content?.parts?.[0]?.text || "Мысли пока не оформились в слова.";
   } catch (error) {
     const msg = error instanceof Error ? error.message : 'Неизвестно';
-    return `[ВЕРСИЯ 15] Ошибка анализа: ${msg}.`;
+    return `[ВЕРСИЯ 16] Ошибка анализа: ${msg}.`;
   }
 }
