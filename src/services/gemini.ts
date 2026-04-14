@@ -6,7 +6,7 @@ export async function getCuratorResponse(message: string, history: { role: 'user
     const contents = history.concat([{ role: 'user', parts: [{ text: message }] }]);
     
     // Ключ больше не передаем, прокси сам его подставит из своих настроек
-    const response = await fetch(`${PROXY_URL}/v1beta/models/gemini-1.5-flash:generateContent`, {
+    const response = await fetch(PROXY_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -17,13 +17,14 @@ export async function getCuratorResponse(message: string, history: { role: 'user
       }),
     });
 
+    const resultText = await response.text();
+
     if (!response.ok) {
-      const errorData = await response.text();
-      console.error("Proxy Error Details:", response.status, errorData);
-      throw new Error(`Статус ${response.status}`);
+      console.error("Proxy Error Details:", response.status, resultText);
+      throw new Error(resultText || `Статус ${response.status}`);
     }
 
-    const data = await response.json();
+    const data = JSON.parse(resultText);
     return data.candidates?.[0]?.content?.parts?.[0]?.text || "Я задумался над вашим вопросом...";
   } catch (error) {
     console.error("Proxy Curator Error:", error);
