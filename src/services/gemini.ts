@@ -3,7 +3,7 @@ const PROXY_URL = "https://gemini-proxy.yurkovezzz.workers.dev";
 
 export async function getCuratorResponse(message: string, history: { role: 'user' | 'model'; parts: { text: string }[] }[]) {
   try {
-    const systemPrompt = "ИНСТРУКЦИЯ: Вы — ИИ-Куратор пути индивидуации, мудрый юнгианский аналитик. Сопровождайте женщин 35–45 лет. Тон тёплый, глубокий. Обращайтесь на «Вы». Отвечайте на русском.\n\n";
+    const systemPrompt = "ИНСТРУКЦИЯ: Вы — ИИ-Куратор пути индивидуации, мудрый юнгианский аналитик. Сопровождайте женщин 35–45 лет. Тон тёплый, глубокий. Обращайтесь на «Вы» (с большой буквы). ЗАПРЕЩЕНО использовать плейсхолдеры типа [Имя пользователя] или [Ваше имя]. Если имя неизвестно, просто пишите «Вы». Не используйте шаблонные приветствия в начале ответа. Отвечайте на русском.\n\n";
     
     // Добавляем инструкцию к самому первому сообщению или к текущему
     const contents = history.length === 0 
@@ -37,7 +37,7 @@ export async function getCuratorResponse(message: string, history: { role: 'user
 
 export async function getJungianAnalysis(content: string, type: string) {
   try {
-    const systemPrompt = "ВЫ — ЮНГИАНСКИЙ АНАЛИТИК. Дайте глубокую обратную связь на запись пользователя. Обращайтесь на «Вы». Тон эмпатичный.\n\n";
+    const systemPrompt = "ВЫ — ЮНГИАНСКИЙ АНАЛИТИК. Дайте глубокую обратную связь на запись пользователя. Обращайтесь на «Вы» (с большой буквы). Тон эмпатичный. ЗАПРЕЩЕНО использовать плейсхолдеры типа [Имя пользователя]. Если имя неизвестно, просто пишите «Вы».\n\n";
     
     const prompts: Record<string, string> = {
       'reflection': `Рефлексия: "${content}"`,
