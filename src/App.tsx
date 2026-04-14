@@ -26,7 +26,9 @@ import {
   History,
   Info,
   CheckCircle2,
-  ArrowRight
+  ArrowRight,
+  Menu,
+  X as CloseIcon
 } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { getJungianAnalysis } from './services/gemini';
@@ -50,6 +52,7 @@ export default function App() {
   const [lastInsight, setLastInsight] = useState('');
   const [isCuratorOpen, setIsCuratorOpen] = useState(false);
   const [isFinalCelebrationOpen, setIsFinalCelebrationOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(() => {
     return !localStorage.getItem('soul_lab_onboarding_seen');
   });
@@ -156,12 +159,44 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#faf9f6] text-stone-900 font-sans selection:bg-stone-200">
-      <div className="max-w-[1400px] mx-auto flex flex-col lg:flex-row min-h-screen">
+    <div className="min-h-screen bg-[#faf9f6] text-stone-900 font-sans selection:bg-stone-200 overflow-x-hidden">
+      {/* Mobile Header */}
+      <div className="lg:hidden bg-white border-b border-stone-100 p-4 sticky top-0 z-50 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-stone-800">
+          <TreePine className="w-5 h-5" />
+          <h1 className="text-base font-serif">Путь индивидуации</h1>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={() => setIsCuratorOpen(true)}
+            className="text-stone-600"
+          >
+            <MessageSquare className="w-5 h-5" />
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            className="text-stone-600"
+          >
+            {isSidebarOpen ? <CloseIcon className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </Button>
+        </div>
+      </div>
+
+      <div className="max-w-[1400px] mx-auto flex flex-col lg:flex-row min-h-screen relative">
         
         {/* Left Sidebar: Progress & Tree */}
-        <aside id="onboarding-sidebar" className="w-full lg:w-72 bg-white border-r border-stone-100 p-6 flex flex-col h-screen sticky top-0">
-          <div className="mb-10">
+        <aside 
+          id="onboarding-sidebar" 
+          className={`
+            fixed inset-y-0 left-0 z-40 w-72 bg-white border-r border-stone-100 p-6 flex flex-col h-full transition-transform duration-300 ease-in-out lg:translate-x-0 lg:sticky lg:top-0 lg:h-screen
+            ${isSidebarOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'}
+          `}
+        >
+          <div className="mb-10 hidden lg:block">
             <div className="flex items-center justify-between mb-1">
               <div className="flex items-center gap-2 text-stone-800">
                 <TreePine className="w-4 h-4" />
@@ -228,6 +263,7 @@ export default function App() {
               onClick={() => {
                 setIsLibraryOpen(!isLibraryOpen);
                 setIsFinalCelebrationOpen(false);
+                setIsSidebarOpen(false);
               }}
               variant="ghost"
               className={`w-full h-10 rounded-xl text-xs flex items-center justify-center gap-2 transition-colors ${isLibraryOpen ? 'bg-stone-100 text-stone-900' : 'text-stone-400 hover:text-stone-600'}`}
@@ -236,7 +272,10 @@ export default function App() {
               <span>Дневник пути</span>
             </Button>
             <Button 
-              onClick={() => setIsCuratorOpen(true)}
+              onClick={() => {
+                setIsCuratorOpen(true);
+                setIsSidebarOpen(false);
+              }}
               variant="outline"
               className="w-full h-12 rounded-xl border-stone-100 text-stone-600 hover:bg-stone-50 flex items-center justify-center gap-2 group"
             >
@@ -249,6 +288,7 @@ export default function App() {
                   setActiveTool('dreams');
                   setIsLibraryOpen(false);
                   setIsFinalCelebrationOpen(false);
+                  setIsSidebarOpen(false);
                 }}
                 variant="ghost"
                 className={`w-full h-10 rounded-xl text-xs flex items-center justify-center gap-2 transition-colors ${activeTool === 'dreams' && !isLibraryOpen ? 'bg-stone-100 text-stone-900' : 'text-stone-400 hover:text-stone-600'}`}
@@ -260,19 +300,27 @@ export default function App() {
           </div>
         </aside>
 
+        {/* Sidebar Overlay for Mobile */}
+        {isSidebarOpen && (
+          <div 
+            className="fixed inset-0 bg-stone-900/20 backdrop-blur-sm z-30 lg:hidden"
+            onClick={() => setIsSidebarOpen(false)}
+          />
+        )}
+
         {/* Main Workspace */}
-        <main className="flex-1 flex flex-col bg-[#fcfaf7]">
+        <main className="flex-1 flex flex-col bg-[#fcfaf7] min-w-0">
           
           {/* Top Info Bar */}
-          <div className="bg-white border-b border-stone-100 p-8">
+          <div className="bg-white border-b border-stone-100 p-6 sm:p-8">
             <div className="max-w-3xl mx-auto space-y-2">
-              <div className="flex items-center gap-2 text-[10px] font-mono text-stone-400 uppercase tracking-widest">
+              <div className="flex items-center gap-2 text-[9px] sm:text-[10px] font-mono text-stone-400 uppercase tracking-widest">
                 <span>Этап {INDIVIDUATION_PATH.findIndex(s => s.id === currentStep.id) + 1}</span>
                 <ChevronRight className="w-3 h-3" />
                 <span className="text-stone-600">{currentStep.module}</span>
               </div>
-              <h2 className="text-3xl font-serif text-stone-800">{currentStep.title}</h2>
-              <p className="text-sm text-stone-500 italic font-serif leading-relaxed whitespace-pre-line">
+              <h2 className="text-2xl sm:text-3xl font-serif text-stone-800">{currentStep.title}</h2>
+              <p className="text-sm sm:text-base text-stone-500 italic font-serif leading-relaxed whitespace-pre-line">
                 {currentStep.description}
               </p>
               {currentStep.id === 'step_2' && <PsycheMap />}
@@ -286,7 +334,7 @@ export default function App() {
           </div>
 
           {/* Path Map Visualization */}
-          <div id="onboarding-map" className="bg-white/50 border-b border-stone-50 px-8">
+          <div id="onboarding-map" className="bg-white/50 border-b border-stone-50 px-4 sm:px-8">
             <div className="max-w-5xl mx-auto">
               <PathMap 
                 steps={INDIVIDUATION_PATH} 
@@ -297,8 +345,8 @@ export default function App() {
           </div>
 
           {/* Interaction Area */}
-          <div className="flex-1 p-8 overflow-y-auto">
-            <div className="max-w-3xl mx-auto space-y-8">
+          <div className="flex-1 p-4 sm:p-8 overflow-y-auto">
+            <div className="max-w-3xl mx-auto space-y-6 sm:space-y-8">
               
               <AnimatePresence mode="wait">
                 {isFinalCelebrationOpen ? (
@@ -318,32 +366,32 @@ export default function App() {
                       </p>
                     </div>
 
-                    <div className="bg-white rounded-[3rem] p-10 shadow-xl border border-stone-50 space-y-8 relative overflow-hidden">
-                      <div className="absolute top-0 right-0 p-8 opacity-5">
+                    <div className="bg-white rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 shadow-xl border border-stone-50 space-y-8 relative overflow-hidden">
+                      <div className="absolute top-0 right-0 p-8 opacity-5 hidden sm:block">
                         <TreePine className="w-40 h-40" />
                       </div>
                       
-                      <div className="flex flex-col md:flex-row gap-10 items-center">
-                        <div className="w-48 h-48 shrink-0">
+                      <div className="flex flex-col md:flex-row gap-6 sm:gap-10 items-center">
+                        <div className="w-32 h-32 sm:w-48 sm:h-48 shrink-0">
                           <TreeVisualizer stage="Полный цвет" isProcessing={false} />
                         </div>
-                        <div className="space-y-4">
-                          <h3 className="text-xl font-serif text-stone-800">Ваше Дерево Самости расцвело</h3>
+                        <div className="space-y-4 text-center md:text-left">
+                          <h3 className="text-lg sm:text-xl font-serif text-stone-800">Ваше Дерево Самости расцвело</h3>
                           <p className="text-sm text-stone-600 leading-relaxed">
                             Вы прошли через Персону, встретились с Тенью, услышали голос бессознательного и интегрировали Анимус. 
-                            Теперь ваше внутреннее Дерево обрело полноту. Это не конец пути, а начало новой, более осознанной жизни.
+                            Теперь Ваше внутреннее Дерево обрело полноту. Это не конец пути, а начало новой, более осознанной жизни.
                           </p>
                         </div>
                       </div>
 
-                      <div className="pt-8 border-t border-stone-50 grid grid-cols-2 gap-4">
-                        <div className="p-6 bg-stone-50 rounded-3xl">
-                          <p className="text-[10px] uppercase tracking-widest text-stone-400 mb-1">Записей в дневнике</p>
-                          <p className="text-2xl font-serif text-stone-800">{progress.entries.length}</p>
+                      <div className="pt-8 border-t border-stone-50 grid grid-cols-2 gap-3 sm:gap-4">
+                        <div className="p-4 sm:p-6 bg-stone-50 rounded-2xl sm:rounded-3xl">
+                          <p className="text-[9px] sm:text-[10px] uppercase tracking-widest text-stone-400 mb-1">Записей</p>
+                          <p className="text-xl sm:text-2xl font-serif text-stone-800">{progress.entries.length}</p>
                         </div>
-                        <div className="p-6 bg-stone-50 rounded-3xl">
-                          <p className="text-[10px] uppercase tracking-widest text-stone-400 mb-1">Пройдено этапов</p>
-                          <p className="text-2xl font-serif text-stone-800">{progress.completedSteps.length} / 5</p>
+                        <div className="p-4 sm:p-6 bg-stone-50 rounded-2xl sm:rounded-3xl">
+                          <p className="text-[9px] sm:text-[10px] uppercase tracking-widest text-stone-400 mb-1">Этапов</p>
+                          <p className="text-xl sm:text-2xl font-serif text-stone-800">{progress.completedSteps.length} / 5</p>
                         </div>
                       </div>
                     </div>
@@ -375,7 +423,7 @@ export default function App() {
                     <div className="flex items-center justify-between">
                       <div>
                         <h2 className="text-2xl font-serif text-stone-800">Дневник пути</h2>
-                        <p className="text-xs text-stone-400">Все ваши записи и инсайты в одном месте</p>
+                        <p className="text-xs text-stone-400">Все Ваши записи и инсайты в одном месте</p>
                       </div>
                       <Button variant="ghost" onClick={() => setIsLibraryOpen(false)} className="text-stone-400">Закрыть</Button>
                     </div>
@@ -388,28 +436,28 @@ export default function App() {
                       ) : (
                         progress.entries.map(entry => (
                           <Card key={entry.id} className="border-none shadow-sm bg-white rounded-3xl overflow-hidden">
-                            <CardHeader className="bg-stone-50/50 border-b border-stone-50 py-4 px-6">
+                            <CardHeader className="bg-stone-50/50 border-b border-stone-50 py-3 sm:py-4 px-4 sm:px-6">
                               <div className="flex justify-between items-center">
-                                <div className="flex items-center gap-3">
-                                  <Badge variant="outline" className="bg-white text-[8px] uppercase tracking-widest">
+                                <div className="flex items-center gap-2 sm:gap-3">
+                                  <Badge variant="outline" className="bg-white text-[7px] sm:text-[8px] uppercase tracking-widest">
                                     {INDIVIDUATION_PATH.find(s => s.id === entry.stepId)?.title || 'Этап'}
                                   </Badge>
-                                  <span className="text-[10px] text-stone-400 font-mono">{entry.date}</span>
+                                  <span className="text-[9px] sm:text-[10px] text-stone-400 font-mono">{entry.date}</span>
                                 </div>
                                 <div className="flex items-center gap-2 text-stone-300">
                                   {React.createElement(getToolIcon(entry.toolType), { className: "w-3 h-3" })}
                                 </div>
                               </div>
                             </CardHeader>
-                            <CardContent className="p-6 space-y-4">
-                              <p className="text-stone-600 italic text-sm leading-relaxed">"{entry.content}"</p>
+                            <CardContent className="p-4 sm:p-6 space-y-4">
+                              <p className="text-stone-600 italic text-sm sm:text-base leading-relaxed">"{entry.content}"</p>
                               {entry.aiInterpretation && (
                                 <div className="bg-amber-50/30 p-4 rounded-2xl border border-amber-100/20">
                                   <div className="flex items-center gap-2 text-amber-700/50 mb-2">
                                     <Sparkles className="w-3 h-3" />
-                                    <span className="text-[9px] font-bold uppercase tracking-widest">Инсайт</span>
+                                    <span className="text-[8px] sm:text-[9px] font-bold uppercase tracking-widest">Инсайт</span>
                                   </div>
-                                  <div className="text-xs text-stone-700 prose prose-stone prose-xs max-w-none">
+                                  <div className="text-xs sm:text-sm text-stone-700 prose prose-stone prose-xs sm:prose-sm max-w-none">
                                     <ReactMarkdown>{entry.aiInterpretation}</ReactMarkdown>
                                   </div>
                                 </div>
@@ -462,31 +510,31 @@ export default function App() {
                               key="insight"
                               initial={{ opacity: 0 }}
                               animate={{ opacity: 1 }}
-                              className="p-10 space-y-8"
+                              className="p-6 sm:p-10 space-y-6 sm:space-y-8"
                             >
                               <div className="space-y-4">
                                 <div className="flex items-center gap-2 text-stone-400">
                                   <Sparkles className="w-4 h-4" />
-                                  <span className="text-[10px] font-bold uppercase tracking-widest">Инсайт от ИИ-Куратора</span>
+                                  <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest">Инсайт от ИИ-Куратора</span>
                                 </div>
-                                <div className="prose prose-stone prose-sm max-w-none text-stone-700 leading-relaxed bg-stone-50 p-8 rounded-3xl border border-stone-100">
+                                <div className="prose prose-stone prose-sm sm:prose-base max-w-none text-stone-700 leading-relaxed bg-stone-50 p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-stone-100">
                                   <ReactMarkdown>{lastInsight}</ReactMarkdown>
                                 </div>
                               </div>
                               
-                              <div className="flex gap-4">
+                              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                                 <Button 
                                   variant="outline" 
-                                  className="flex-1 h-14 rounded-2xl border-stone-200 text-stone-500 hover:bg-stone-50"
+                                  className="flex-1 h-12 sm:h-14 rounded-xl sm:rounded-2xl border-stone-200 text-stone-500 hover:bg-stone-50"
                                   onClick={() => setLastInsight('')}
                                 >
                                   Добавить еще запись
                                 </Button>
                                 <Button 
-                                  className="flex-1 h-14 rounded-2xl bg-stone-800 text-white hover:bg-stone-900 shadow-lg"
+                                  className="flex-1 h-12 sm:h-14 rounded-xl sm:rounded-2xl bg-stone-800 text-white hover:bg-stone-900 shadow-lg"
                                   onClick={handleCompleteStep}
                                 >
-                                  {progress.completedSteps.includes(currentStep.id) ? 'К следующему этапу' : 'Завершить этап и идти дальше'}
+                                  {progress.completedSteps.includes(currentStep.id) ? 'К следующему этапу' : 'Завершить этап'}
                                 </Button>
                               </div>
                             </motion.div>
@@ -495,13 +543,13 @@ export default function App() {
                               key="input"
                               initial={{ opacity: 0 }}
                               animate={{ opacity: 1 }}
-                              className="p-10 space-y-6"
+                              className="p-6 sm:p-10 space-y-4 sm:space-y-6"
                             >
                               <div className="space-y-2">
-                                <label className="text-xs font-bold text-stone-400 uppercase tracking-wider">Ваше поле для работы</label>
+                                <label className="text-[10px] sm:text-xs font-bold text-stone-400 uppercase tracking-wider">Ваше поле для работы</label>
                                 <Textarea 
                                   placeholder={tool.prompt}
-                                  className="min-h-[250px] bg-stone-50/50 border-none rounded-3xl p-8 focus:ring-1 focus:ring-stone-100 resize-none text-lg text-stone-800 leading-relaxed placeholder:text-stone-300"
+                                  className="min-h-[200px] sm:min-h-[250px] bg-stone-50/50 border-none rounded-2xl sm:rounded-3xl p-6 sm:p-8 focus:ring-1 focus:ring-stone-100 resize-none text-base sm:text-lg text-stone-800 leading-relaxed placeholder:text-stone-300"
                                   value={newEntry}
                                   onChange={(e) => setNewEntry(e.target.value)}
                                 />
@@ -509,12 +557,12 @@ export default function App() {
                               <Button 
                                 onClick={handleAddEntry}
                                 disabled={isAnalyzing || !newEntry.trim()}
-                                className="w-full h-16 rounded-2xl bg-stone-800 text-white hover:bg-stone-900 text-lg font-medium shadow-xl shadow-stone-200 transition-all active:scale-[0.98]"
+                                className="w-full h-14 sm:h-16 rounded-xl sm:rounded-2xl bg-stone-800 text-white hover:bg-stone-900 text-base sm:text-lg font-medium shadow-xl shadow-stone-200 transition-all active:scale-[0.98]"
                               >
                                 {isAnalyzing ? (
                                   <div className="flex items-center gap-3">
                                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                    <span>ИИ-Куратор анализирует...</span>
+                                    <span>Анализ...</span>
                                   </div>
                                 ) : 'Зафиксировать и получить инсайт'}
                               </Button>

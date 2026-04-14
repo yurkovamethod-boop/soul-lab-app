@@ -24,35 +24,35 @@ interface OnboardingStep {
 const STEPS: OnboardingStep[] = [
   {
     title: "Добро пожаловать на путь индивидуации",
-    description: "Это ваше личное пространство для работы с собой по методу Карла Юнга. Давайте покажу, как здесь всё устроено.",
+    description: "Это Ваше личное пространство для работы с собой по методу Карла Юнга. Давайте покажу, как здесь всё устроено.",
   },
   {
     title: "Ваш путь",
-    description: "Здесь отображается ваш прогресс. Каждый этап открывает новую грань психики. Дерево растёт вместе с вашим осознанием.",
+    description: "Здесь отображается Ваш прогресс. Каждый этап открывает новую грань психики. Дерево растёт вместе с Вашим осознанием.",
     targetId: "onboarding-sidebar",
     arrowDirection: "left",
   },
   {
     title: "Карта пути",
-    description: "Здесь визуализирован весь путь от Персоны до Самости. Ты можешь вернуться к любому пройденному этапу.",
+    description: "Здесь визуализирован весь путь от Персоны до Самости. Вы можете вернуться к любому пройденному этапу.",
     targetId: "onboarding-map",
     arrowDirection: "up",
   },
   {
     title: "Рабочее пространство",
-    description: "Здесь вы пишете свои мысли и выполняете задания урока. После записи ИИ-Куратор даст обратную связь.",
+    description: "Здесь Вы пишете свои мысли и выполняете задания урока. После записи ИИ-Куратор даст обратную связь.",
     targetId: "onboarding-workspace",
     arrowDirection: "down",
   },
   {
     title: "Дневник и ИИ-Куратор",
-    description: "В дневнике хранятся все ваши записи. ИИ-Куратор доступен в любой момент — для вопросов, интерпретаций и поддержки.",
+    description: "В дневнике хранятся все Ваши записи. ИИ-Куратор доступен в любой момент — для вопросов, интерпретаций и поддержки.",
     targetId: "onboarding-tools",
     arrowDirection: "left",
   },
   {
-    title: "Готова начать?",
-    description: "Ваше дерево ждёт первого жёлудя. Посмотрите видеоурок на платформе курса и возвращайтесь сюда выполнить задание.",
+    title: "Готовы начать?",
+    description: "Ваше Дерево ждёт первого жёлудя. Посмотрите видеоурок на платформе курса и возвращайтесь сюда выполнить задание.",
   }
 ];
 
@@ -157,11 +157,11 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onClose }) => {
 
       {renderArrow()}
 
-      <div className="absolute inset-0 flex items-center justify-center p-6 pointer-events-none">
+      <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-6 pointer-events-none">
         <motion.div 
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          className="relative w-full max-w-md bg-white rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col pointer-events-auto"
+          className="relative w-full max-w-md bg-white rounded-[2rem] sm:rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col pointer-events-auto max-h-[90vh]"
         >
           {/* Progress Bar */}
           <div className="absolute top-0 left-0 right-0 h-1 flex gap-0.5">
@@ -180,18 +180,18 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onClose }) => {
             <X className="w-5 h-5" />
           </button>
 
-          <div className="p-10 pt-12 flex-1 flex flex-col items-center text-center">
+          <div className="p-8 sm:p-10 pt-10 sm:pt-12 flex-1 flex flex-col items-center text-center overflow-y-auto">
             <AnimatePresence mode="wait">
               <motion.div 
                 key={currentStep}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="space-y-6"
+                className="space-y-4 sm:space-y-6"
               >
-                <div className="space-y-3">
-                  <h2 className="text-xl font-serif text-stone-800">{STEPS[currentStep].title}</h2>
-                  <p className="text-sm text-stone-500 leading-relaxed whitespace-pre-line">
+                <div className="space-y-2 sm:space-y-3">
+                  <h2 className="text-lg sm:text-xl font-serif text-stone-800">{STEPS[currentStep].title}</h2>
+                  <p className="text-sm sm:text-base text-stone-500 leading-relaxed whitespace-pre-line">
                     {STEPS[currentStep].description}
                   </p>
                 </div>

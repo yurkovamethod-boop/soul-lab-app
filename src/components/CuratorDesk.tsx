@@ -18,7 +18,7 @@ interface CuratorDeskProps {
 
 export const CuratorDesk: React.FC<CuratorDeskProps> = ({ isOpen, onClose }) => {
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'model', content: 'Здравствуйте. Я ваш ИИ-Куратор на пути индивидуации. Вы можете задать любой вопрос о пути, поделиться тем, что вас беспокоит, или попросить помочь разобраться в образе или переживании. О чём вы думаете сейчас?' }
+    { role: 'model', content: 'Здравствуйте. Я Ваш ИИ-Куратор на пути индивидуации. Вы можете задать любой вопрос о пути, поделиться тем, что Вас беспокоит, или попросить помочь разобраться в образе или переживании. О чём Вы думаете сейчас?' }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -67,7 +67,7 @@ export const CuratorDesk: React.FC<CuratorDeskProps> = ({ isOpen, onClose }) => 
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed right-0 top-0 h-screen w-full max-w-md bg-white shadow-2xl z-[101] flex flex-col"
+            className="fixed right-0 top-0 h-screen w-full sm:max-w-md bg-white shadow-2xl z-[101] flex flex-col"
           >
             {/* Header */}
             <div className="p-6 border-b border-stone-100 flex items-center justify-between bg-[#faf9f6]">
@@ -95,10 +95,10 @@ export const CuratorDesk: React.FC<CuratorDeskProps> = ({ isOpen, onClose }) => 
                     }`}>
                       {m.role === 'user' ? <User className="w-4 h-4 text-stone-500" /> : <Bot className="w-4 h-4 text-white" />}
                     </div>
-                    <div className={`max-w-[80%] p-4 rounded-2xl text-sm leading-relaxed ${
+                    <div className={`max-w-[85%] sm:max-w-[80%] p-4 rounded-2xl text-base sm:text-sm leading-relaxed ${
                       m.role === 'user' ? 'bg-stone-50 text-stone-800 rounded-tr-none' : 'bg-white border border-stone-100 text-stone-700 rounded-tl-none shadow-sm'
                     }`}>
-                      <div className="prose prose-stone prose-sm max-w-none">
+                      <div className="prose prose-stone prose-sm sm:prose-base max-w-none">
                         <ReactMarkdown>
                           {m.content}
                         </ReactMarkdown>
@@ -127,7 +127,7 @@ export const CuratorDesk: React.FC<CuratorDeskProps> = ({ isOpen, onClose }) => 
                 <textarea 
                   rows={1}
                   placeholder="Ваш вопрос ИИ-Куратору..."
-                  className="w-full bg-white border border-stone-200 rounded-2xl py-4 pl-4 pr-14 text-sm focus:outline-none focus:ring-1 focus:ring-stone-400 resize-none"
+                  className="w-full bg-white border border-stone-200 rounded-2xl py-4 pl-4 pr-14 text-base sm:text-sm focus:outline-none focus:ring-1 focus:ring-stone-400 resize-none"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => {
@@ -146,9 +146,14 @@ export const CuratorDesk: React.FC<CuratorDeskProps> = ({ isOpen, onClose }) => 
                   <Send className="w-4 h-4" />
                 </Button>
               </div>
-              <p className="text-[9px] text-center text-stone-400 mt-3 italic">
-                ИИ-Куратор сопровождает вас на протяжении всего пути.
-              </p>
+              <div className="mt-3 space-y-1">
+                <p className="text-[10px] sm:text-[11px] text-center text-stone-400 italic leading-tight">
+                  ИИ может ошибаться. Проверяйте важную информацию. 
+                </p>
+                <p className="text-[9px] sm:text-[10px] text-center text-stone-300 leading-tight">
+                  Ответы носят ознакомительный характер и не являются призывом к действию.
+                </p>
+              </div>
             </div>
           </motion.div>
         </>

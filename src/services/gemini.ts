@@ -27,7 +27,7 @@ export async function getCuratorResponse(message: string, history: { role: 'user
     }
 
     const data = JSON.parse(resultText);
-    return data.candidates?.[0]?.content?.parts?.[0]?.text || "Я задумался над вашим вопросом...";
+    return data.candidates?.[0]?.content?.parts?.[0]?.text || "Я задумался над Вашим вопросом...";
   } catch (error) {
     console.error("Proxy Curator Error:", error);
     const msg = error instanceof Error ? error.message : 'Неизвестно';
