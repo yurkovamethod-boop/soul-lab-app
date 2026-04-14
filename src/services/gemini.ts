@@ -31,12 +31,7 @@ export async function getCuratorResponse(message: string, history: { role: 'user
   } catch (error) {
     console.error("Proxy Curator Error:", error);
     const msg = error instanceof Error ? error.message : 'Неизвестно';
-    if (msg === 'Failed to fetch') {
-      return `[ВЕРСИЯ 10] Ошибка: Браузер заблокировал запрос. 
-      1. Откройте сайт в режиме ИНКОГНИТО (Ctrl+Shift+N).
-      2. Если не поможет, нажмите F12 -> вкладка Console и пришлите скриншот красной ошибки.`;
-    }
-    return `[ВЕРСИЯ 10] Ошибка: ${msg}.`;
+    return `[ВЕРСИЯ 11] Ошибка: ${msg}.`;
   }
 }
 
@@ -72,9 +67,6 @@ export async function getJungianAnalysis(content: string, type: string) {
     return data.candidates?.[0]?.content?.parts?.[0]?.text || "Мысли пока не оформились в слова.";
   } catch (error) {
     const msg = error instanceof Error ? error.message : 'Неизвестно';
-    if (msg === 'Failed to fetch') {
-      return `[ВЕРСИЯ 10] Ошибка анализа: Запрос заблокирован браузером. Попробуйте режим Инкогнито или проверьте консоль (F12).`;
-    }
-    return `[ВЕРСИЯ 10] Ошибка анализа: ${msg}.`;
+    return `[ВЕРСИЯ 11] Ошибка анализа: ${msg}.`;
   }
 }
